@@ -193,8 +193,13 @@ class JobProgress(threading.Thread, Queue.Queue):
 
             def getter(*args, **kwargs):
                 dbutils.exit_if_in_transaction(log)
-                log.debug("putting: {} on the queue".format(name))
-                self.put(deepcopy((name, args, kwargs)))
+                log.info("putting: {} on the queue".format(name))
+
+                try:
+                    self.put(deepcopy((name, args, kwargs)))
+                except RuntimeError as e:
+                    from remote_pdb import RemotePdb
+                    RemotePdb("127.0.0.1", 4444).set_trace()
 
             return getter
 
