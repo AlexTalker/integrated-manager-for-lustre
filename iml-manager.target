@@ -14,6 +14,7 @@ Wants=iml-realtime.service
 Wants=iml-view-server.service
 Wants=iml-update-handler.socket
 Wants=iml-srcmap-reverse.socket
+Wants=iml-warp-drive.service
 Wants=nginx.service
 Wants=rabbitmq-server.service
 Wants=postgresql.service

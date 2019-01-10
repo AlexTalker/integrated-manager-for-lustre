@@ -88,6 +88,7 @@ Requires:       iml-device-scanner-aggregator
 Requires:       iml-realtime
 Requires:       iml-view-server
 Requires:       iml-socket-worker
+Requires:       rust-iml-warp-drive
 Requires:       createrepo
 Requires:       python2-toolz
 Requires:       iml-update-handler < 2
@@ -297,6 +298,7 @@ cp -r /var/lib/chroma/* %{_localstatedir}/lib/rpm-state/%{name}/
 %systemd_preun iml-stats.service
 %systemd_preun iml-syslog.service
 %systemd_preun iml-view-server.service
+%systemd_preun iml-warp-drive.service
 
 %postun -n python2-%{pypi_name}
 if [ $1 -lt 1 ]; then

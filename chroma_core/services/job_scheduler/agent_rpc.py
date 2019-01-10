@@ -319,7 +319,7 @@ class AgentRpcMessenger(object):
         :param timeout: how long to wait before quiting.
         :return: timeout remaining 0=failed, !0 is pass and useful for debug.
         """
-        while self.get_session_id(fqdn) == None and timeout > 0:
+        while self.get_session_id(fqdn) is None and timeout > 0:
             # Allow a short wait for a session to show up, for example
             # when running setup actions on a host we've just added its
             # session may not yet have been fully established
