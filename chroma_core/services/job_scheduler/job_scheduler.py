@@ -198,6 +198,7 @@ class JobProgress(threading.Thread, Queue.Queue):
                 try:
                     self.put(deepcopy((name, args, kwargs)))
                 except RuntimeError as e:
+                    log.info("hit error block")
                     from remote_pdb import RemotePdb
                     RemotePdb("127.0.0.1", 4444).set_trace()
 
