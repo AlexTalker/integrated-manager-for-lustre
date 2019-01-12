@@ -253,7 +253,7 @@ class RunJobThread(threading.Thread):
         self._connection_quota = connection_quota
         self._cancel = threading.Event()
         self._complete = threading.Event()
-        self.steps = steps
+        self.steps = deepcopy(steps)
 
     def cancel(self):
         log.info("Job %s: cancelling" % self.job.id)
