@@ -91,6 +91,8 @@ jobs:
         - cargo clippy
     - stage: test
       name: "Rust Format Check"
+      language: rust
+      rust: 1.32.0
       before_script:
         - rustup component add rustfmt
       script:

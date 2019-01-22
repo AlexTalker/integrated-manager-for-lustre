@@ -22,12 +22,6 @@ BuildRequires:  cargo
 %description
 %{summary}.
 
-%package
-Summary:        %{summary}
-
-%description
-%{summary}.
-
 %prep
 %autosetup -n %{crate}-%{version} -p1
 %cargo_prep
