@@ -71,7 +71,7 @@ jobs:
         - docker cp -a ./ mock:/builddir
         - docker exec -it mock bash -xec 'chown -R root:root /builddir'
         - docker exec -it mock bash -xec 'yum install -y dnf'
-        - docker exec -ti mock bash -xec 'cd /builddir/iml-warp-drive && make -f .copr/Makefile srpm outdir=/tmp/'
+        - docker exec -ti mock bash -xec 'cd /builddir/iml-warp-drive && make -f ../copr/Makefile srpm outdir=/tmp/'
     - stage: test
       name: "Rust Tests"
       language: rust
