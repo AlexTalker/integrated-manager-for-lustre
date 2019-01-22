@@ -13,6 +13,7 @@ class IMLUnitTestCase(TestCase):
         super(IMLUnitTestCase, self).setUp()
 
         mock.patch("chroma_core.services.dbutils.exit_if_in_transaction").start()
+        mock.patch("chroma_core.services.job_scheduler.lock_cache.lock_change_receiver").start()
 
     def make_command(self, complete=False, created_at=None, errored=True, message="test"):
 
