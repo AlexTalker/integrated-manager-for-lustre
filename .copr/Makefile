@@ -4,9 +4,7 @@ $(CARGO):
 	dnf install -y cargo
 
 srpm: $(CARGO)
-	dnf install -y spectool dnf-plugins-core
-	dnf copr enable -y managerforlustre/manager-for-lustre-devel
-	dnf install -y rust-bundled-packaging
+	dnf install -y spectool rust-bundled-packaging
 	rm -rf /tmp/_topdir
 	rm -rf /tmp/scratch
 	mkdir -p /tmp/_topdir/SOURCES
