@@ -209,6 +209,7 @@ mv $RPM_BUILD_ROOT/%{python_sitelib}/* $RPM_BUILD_ROOT%{manager_root}
 # Do a little dance to get the egg-info in place
 mv $RPM_BUILD_ROOT%{manager_root}/*.egg-info $RPM_BUILD_ROOT/%{python_sitelib}
 mkdir -p $RPM_BUILD_ROOT/etc/{init,logrotate,nginx/conf,nginx/default}.d
+mkdir -p $RPM_BUILD_ROOT/etc/rabbitmq
 touch $RPM_BUILD_ROOT/etc/nginx/conf.d/chroma-manager.conf
 cp %{SOURCE16} $RPM_BUILD_ROOT/etc/nginx/default.d/iml-manager-redirect.conf
 cp %{SOURCE17} $RPM_BUILD_ROOT/etc/rabbitmq/rabbitmq-env.conf
