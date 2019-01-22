@@ -83,8 +83,8 @@ class LockCache(object):
                     [l for l in self.write_by_item[locked_item] if l.job != not_job],
                     lambda a, b: cmp(a.job.id, b.job.id),
                 )[-1]
-            else:
-                return sorted(self.write_by_item[locked_item], lambda a, b: cmp(a.job.id, b.job.id))[-1]
+
+            return sorted(self.write_by_item[locked_item], lambda a, b: cmp(a.job.id, b.job.id))[-1]
         except IndexError:
             return None
 
