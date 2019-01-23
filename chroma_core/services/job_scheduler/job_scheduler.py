@@ -64,6 +64,7 @@ log = log_register(__name__.split(".")[-1])
 class LockQueue(ServiceQueue):
     name = "locks"
 
+
 @lock_change_receiver()
 def on_rec(lock, add_remove):
     LockQueue().put(to_lock_json(lock, add_remove))
