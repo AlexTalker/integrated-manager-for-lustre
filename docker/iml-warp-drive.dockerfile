@@ -3,7 +3,7 @@ WORKDIR /build
 COPY . .
 RUN cargo build --release
 
-FROM rust:1.32-slim
+FROM rust:1.32
 WORKDIR /root/
 COPY --from=builder /build/target/release/iml-warp-drive .
 RUN apt-get update \
