@@ -173,9 +173,15 @@ class TestAvailableJobs(IMLUnitTestCase):
         ).natural_key()
         lnet_configuration_id = self.host.lnet_configuration.id
 
-        locks = js.get_locks(lnet_configuration_ct_key, lnet_configuration_id)
-        self.assertFalse(locks["read"])
-        self.assertEqual(2, len(locks["write"]))
+        locks = js.get_locks()
+
+        xss = locks.values()
+        self.assertEqual(len(xss), 1)
+
+        xs = xss.pop()
+
+        self.assertEqual(len(xs), 2)
+        self.assertEqual(len([x for x in xs if x.get("lock_type") == "write"]), 2)
 
     def test_managed_host_undeployed(self):
         """Test that an undeployed host can only be force removed"""

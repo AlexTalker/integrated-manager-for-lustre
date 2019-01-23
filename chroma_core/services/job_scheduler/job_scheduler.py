@@ -1618,11 +1618,11 @@ class JobScheduler(object):
         all_locks = [to_lock_json(x) for x in self._lock_cache.read_locks + self._lock_cache.write_locks]
 
         def update_locks(locks, lock):
-            lock_id = "{}:{}".format(lock.content_type_id, lock.item_id)
+            lock_id = "{}:{}".format(lock['content_type_id'], lock['item_id'])
 
-            xs = locks.get(lock_id, set())
+            xs = locks.get(lock_id, [])
 
-            xs.add(lock)
+            xs.append(lock)
 
             locks[lock_id] = xs
 
