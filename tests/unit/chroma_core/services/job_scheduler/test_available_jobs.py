@@ -4,7 +4,6 @@ from django.db import connection, reset_queries
 from tests.unit.lib.iml_unit_test_case import IMLUnitTestCase
 from chroma_core.lib.cache import ObjectCache
 from chroma_core.models import ManagedMgs, ManagedFilesystem, ManagedOst, ManagedMdt, RebootHostJob, ShutdownHostJob
-from chroma_core.services.job_scheduler.job_scheduler import JobScheduler
 from tests.unit.chroma_core.helpers import synthetic_volume, synthetic_host
 
 
@@ -25,10 +24,13 @@ class TestAvailableJobs(IMLUnitTestCase):
 
         super(TestAvailableJobs, self).setUp()
 
+        from chroma_core.services.job_scheduler.job_scheduler import JobScheduler
+
         from tests.unit.chroma_core.helpers import load_default_profile
 
         load_default_profile()
 
+        self.JobScheduler = JobScheduler
         self.js = JobScheduler()
         volume = synthetic_volume(with_storage=False)
 
@@ -120,7 +122,7 @@ class TestAvailableJobs(IMLUnitTestCase):
         host_id = self.host.id
 
         #  Loads up the caches
-        js = JobScheduler()
+        js = self.JobScheduler()
 
         reset_queries()
         js.available_jobs([(host_ct_key, host_id)])
@@ -150,7 +152,7 @@ class TestAvailableJobs(IMLUnitTestCase):
 
         #  Loads up the caches, including the _lock_cache while should find
         #  these jobs.
-        js = JobScheduler()
+        js = self.JobScheduler()
 
         reset_queries()
 
@@ -165,7 +167,7 @@ class TestAvailableJobs(IMLUnitTestCase):
         )
 
     def test_object_is_locked(self):
-        js = JobScheduler()
+        js = self.JobScheduler()
         self._fake_add_lock(js, self.host.lnet_configuration, "lnet_up")
 
         lnet_configuration_ct_key = ContentType.objects.get_for_model(

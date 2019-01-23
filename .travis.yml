@@ -72,7 +72,7 @@ jobs:
         - docker exec -it mock bash -xec 'chown -R root:root /builddir'
         - docker exec -it mock bash -xec 'yum install -y dnf dnf-plugins-core'
         - docker exec -it mock bash -xec 'dnf copr enable -y managerforlustre/buildtools'
-        - docker exec -it mock bash -xec 'cd /builddir/iml-warp-drive && make -f ./copr/Makefile srpm outdir=/tmp/'
+        - docker exec -it mock bash -xec 'cd /builddir/iml-warp-drive && make -f .copr/Makefile srpm outdir=/tmp/'
     - stage: test
       name: "Rust Tests"
       language: rust
@@ -130,7 +130,7 @@ jobs:
         - export SRPM_PATH='/tmp/*.src.rpm'
         - docker run -dit --entrypoint "/bin/bash" --name "copr" -e OWNER="$OWNER" -e PROJECT="$PROJECT" -e KEY="$encrypted_253525cedcf6_key" -e IV="$encrypted_253525cedcf6_iv" -v $(pwd):/build:rw imlteam/copr
         - docker exec -it copr bash -xec 'dnf copr enable -y managerforlustre/buildtools'
-        - docker exec -it mock bash -xec 'cd /build/iml-warp-drive && make -f ./copr/Makefile srpm outdir=/tmp/'
+        - docker exec -it mock bash -xec 'cd /build/iml-warp-drive && make -f .copr/Makefile srpm outdir=/tmp/'
         - docker exec -it mock bash -xec 'create_build'
 stages:
   - test
