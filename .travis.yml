@@ -22,7 +22,6 @@ jobs:
         - cd docker
         - docker build --rm -t imlteam/manager-service-base -f base.dockerfile ../
         - docker build --rm -t imlteam/manager-nginx -f nginx.dockerfile ../
-        - docker build --rm -t imlteam/iml-warp-drive -f iml-warp-drive.dockerfile ../
         - docker-compose build
     - stage: test
       name: "Unit Tests"

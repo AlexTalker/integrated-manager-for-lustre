@@ -177,8 +177,8 @@ services:
     image: "imlteam/iml-warp-drive"
     hostname: "iml-warp-drive"
     build:
-      context: .
-      dockerfile: ./iml-warp-drive.dockerfile
+      context: ../
+      dockerfile: ./docker/iml-warp-drive.dockerfile
     deploy: *default-deploy
     volumes:
       - "manager-config:/var/lib/chroma"
