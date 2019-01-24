@@ -179,9 +179,15 @@ services:
     build:
       context: ../
       dockerfile: ./docker/iml-warp-drive.dockerfile
-    deploy: *default-deploy
+    deploy:
+      restart_policy:
+        condition: unless-stopped
+        delay: 5s
+        window: 5s
     volumes:
       - "manager-config:/var/lib/chroma"
+    environment:
+      - PROXY_HOST=iml-warp-drive
   setup:
     image: "imlteam/manager-setup"
     command: ["tail", "-f", "/dev/null"]

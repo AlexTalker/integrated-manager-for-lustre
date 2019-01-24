@@ -129,8 +129,7 @@ fn main() {
 
         log::info!("about to serve");
 
-        let (_, fut) = warp::serve(routes)
-            .bind_with_graceful_shutdown(([127, 0, 0, 1], env::get_server_port()), rx);
+        let (_, fut) = warp::serve(routes).bind_with_graceful_shutdown(env::get_server_addr(), rx);
 
         fut
     }));

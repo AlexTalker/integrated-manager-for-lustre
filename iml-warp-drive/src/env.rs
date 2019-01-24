@@ -2,11 +2,30 @@
 // Use of this source code is governed by a MIT-style
 // license that can be found in the LICENSE file.
 
-use std::env;
+use std::{
+    env,
+    net::{SocketAddr, ToSocketAddrs},
+};
 
 /// Get the environment variable or panic
 fn get_var(name: &str) -> String {
     env::var(name).unwrap_or_else(|_| panic!("{} environment variable is required.", name))
+}
+
+/// Convert a given host and port to a SocketAddr or panic
+fn to_socket_addr(host: String, port: String) -> SocketAddr {
+    let raw_addr = format!("{}:{}", host, port);
+
+    let mut addrs_iter = raw_addr.to_socket_addrs().unwrap_or_else(|_| {
+        panic!(
+            "Address not parsable to SocketAddr. host: {}, port: {}",
+            host, port
+        )
+    });
+
+    addrs_iter
+        .next()
+        .expect("Could not convert to a SocketAddr")
 }
 
 /// Get the broker user from the env or panic
@@ -26,7 +45,7 @@ pub fn get_vhost() -> String {
 
 /// Get the broker host from the env or panic
 pub fn get_host() -> String {
-    localhost_to_ip(get_var("AMQP_BROKER_HOST"))
+    get_var("AMQP_BROKER_HOST")
 }
 
 /// Get the broker port from the env or panic
@@ -35,27 +54,20 @@ pub fn get_port() -> String {
 }
 
 /// Get the server port from the env or panic
-pub fn get_server_port() -> u16 {
-    get_var("MESSAGING_PORT").parse().unwrap()
+pub fn get_server_port() -> String {
+    get_var("MESSAGING_PORT")
 }
 
 /// Get the server host from the env or panic
 pub fn get_server_host() -> String {
-    localhost_to_ip(get_var("PROXY_HOST"))
+    get_var("PROXY_HOST")
 }
 
-/// Translate the string localhost -> 127.0.0.1
-fn localhost_to_ip(host: String) -> String {
-    if host == "localhost" {
-        "127.0.0.1".to_string()
-    } else {
-        host
-    }
+pub fn get_server_addr() -> SocketAddr {
+    to_socket_addr(get_server_host(), get_server_port())
 }
 
 /// Get the AMQP server address or panic
-pub fn get_addr() -> std::net::SocketAddr {
-    format!("{}:{}", get_host(), get_port())
-        .parse()
-        .expect("Address not parsable to SocketAddr")
+pub fn get_addr() -> SocketAddr {
+    to_socket_addr(get_host(), get_port())
 }
