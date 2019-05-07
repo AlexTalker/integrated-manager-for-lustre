@@ -39,7 +39,7 @@ from chroma_core.lib.storage_plugin.base_resource import BaseStorageResource
 from chroma_core.lib.storage_plugin.log import storage_plugin_log as log
 from chroma_core.lib.util import all_subclasses
 
-from chroma_core.models import ManagedHost, ManagedTarget
+from chroma_core.models import ManagedHost, ManagedTarget, ManagedTargetMount
 from chroma_core.models import LNetNidsChangedAlert
 from chroma_core.models import Volume, VolumeNode
 from chroma_core.models import StorageResourceRecord, StorageResourceStatistic
@@ -721,6 +721,21 @@ class ResourceManager(object):
             )
             if volume_node.storage_resource_id not in usable_node_resource_ids:
                 self._remove_volume_node(volume_node, True)
+            else:
+                # Since UpdateManagedTargetMount is not invoked
+                # for monitored target, do the simple version of same work here
+                # This reverses effect of deletion above
+                try:
+                    mtm = ManagedTargetMount.objects.get(
+                        host_id=volume_node.host_id, volume_node__path=volume_node.path, not_deleted=True
+                    )
+                    current_volume_node = mtm.volume_node
+                    if mtm.target.immutable_state and not current_volume_node.not_deleted:
+                        log.debug("Update ManagedTargetMount %s with VolumeNode %s" % (mtm, volume_node))
+                        mtm.volume_node = volume_node
+                        mtm.save()
+                except (ManagedTargetMount.DoesNotExist, ManagedTargetMount.MultipleObjectsReturned):
+                    pass
 
     def _set_affinity_weights(self, volume, volume_nodes):
         from chroma_core.lib.storage_plugin.api.resources import PathWeight

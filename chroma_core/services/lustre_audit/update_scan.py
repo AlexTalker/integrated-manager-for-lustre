@@ -202,10 +202,15 @@ class UpdateScan(object):
             if target_mount.target.immutable_state:
                 target = target_mount.target
                 if mounted_locally:
+                    # For managed targets this handled by
+                    # UpdateManagedTargetMount step
+                    # Unfortunately, it is not called for monitored one
+                    # Thus, associate target volume with mount here
+                    volume_id = target_mount.volume_node.volume.id
                     job_scheduler_notify.notify(
                         target,
                         self.started_at,
-                        {"state": "mounted", "active_mount_id": target_mount.id},
+                        {"state": "mounted", "active_mount_id": target_mount.id, "volume_id": volume_id},
                         ["mounted", "unmounted"],
                     )
                 elif not mounted_locally and target.active_mount == target_mount:
@@ -291,7 +296,7 @@ class UpdateScan(object):
         try:
             target = ManagedTarget.objects.get(name=target_name).downcast()
 
-            if target.immutable_state and (target.active_host == target.primary_host):
+            if target.immutable_state:
                 # in monitored mode we want to make sure the target volume is accessible on current host
                 target.volume.volumenode_set.get(host=self.host, not_deleted=True)
             else:
